@@ -58,6 +58,13 @@ npm test
 ```
 Tests mock `fetch` and validate query-string, retry logic, pagination, resolver, and the orchestrator guardrails.
 
+## CI
+- A GitHub Actions workflow runs install, build, tests, and endpoint audit on every push/PR.
+- See `docs/CI_WORKFLOW.md` for a full walkthrough and badge setup.
+
+## Tool Reference
+See `docs/TOOLS.md` for inputs, guardrails, and examples for each tool.
+
 ## Resume Guide
 If interrupted, check `RESUME_STATE.json`:
 - Identify `phase` and `step_index` (from `BUILD_LOG.md`).

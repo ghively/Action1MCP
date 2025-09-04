@@ -23,6 +23,44 @@ export function buildServer() {
     return (server as any).tool?.(name, schema, handler);
   }
 
+  // Optional: search_resources (fallback to client-side filter if needed)
+  registerTool(
+    "search_resources",
+    z.object({
+      query: z.string(),
+      resource: z.string().optional(),
+      fields: z.array(z.string()).optional(),
+      limit: z.number().int().positive().optional(),
+      orgId: z.union([z.string(), z.number()]).optional()
+    }),
+    async (input) => {
+      const searchRes = endpoints.resources["search"]?.list;
+      if (searchRes) {
+        if (!input.orgId) return { content: [{ type: "text", text: "orgId is required for search." }] };
+        const path = interpolatePath(searchRes.path, { orgId: input.orgId });
+        const data = await getWithRetry(`${path}${qs({ q: input.query, limit: input.limit })}`);
+        return { content: [{ type: "json", json: data }] };
+      }
+      // Fallback: client-side filter over list endpoint if provided
+      if (!input.resource) {
+        return { content: [{ type: "text", text: "No official search endpoint; provide resource for client-side search." }] };
+      }
+      const res = endpoints.resources[input.resource];
+      if (!res?.list) return { content: [{ type: "text", text: `Resource "${input.resource}" not listable.` }] };
+      let path = res.list.path;
+      if (path.includes("{orgId}")) {
+        if (!input.orgId) return { content: [{ type: "text", text: "orgId required for resource search." }] };
+        path = interpolatePath(path, { orgId: input.orgId });
+      }
+      const data = await getWithRetry(`${path}${qs({})}`);
+      const items: any[] = Array.isArray(data) ? data : data?.items ?? data?.data ?? [];
+      const q = input.query.toLowerCase();
+      const filtered = items.filter((it) => JSON.stringify(it).toLowerCase().includes(q));
+      const limited = input.limit ? filtered.slice(0, input.limit) : filtered;
+      return { content: [{ type: "json", json: { items: limited, warning: "Client-side search; official search endpoint not used." } }] };
+    }
+  );
+
   function allowDestructive(confirm?: string, dryRun?: boolean): { allowed: boolean; reason?: string } {
     if (dryRun) return { allowed: true };
     if (process.env.ALLOW_DESTRUCTIVE !== "true") {
