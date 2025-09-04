@@ -204,6 +204,11 @@ export const endpoints: EndpointsSpec = {
       list: { path: "/endpoints/deployers/{orgId}", method: "GET", paramsSchema: orgParam },
       get: { path: "/endpoints/deployers/{orgId}/{deployerId}", method: "GET", paramsSchema: deployerParams },
       delete: { path: "/endpoints/deployers/{orgId}/{deployerId}", method: "DELETE", paramsSchema: deployerParams }
+    },
+
+    // Deployer installation links
+    deployer_installation_windows: {
+      list: { path: "/endpoints/deployer-installation/{orgId}/windowsEXE", method: "GET", paramsSchema: orgParam }
     }
   },
 
