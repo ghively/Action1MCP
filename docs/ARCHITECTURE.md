@@ -81,4 +81,4 @@ Dockerfile               # container build and run
 - Add rate-limit header parsing to adapt backoff dynamically.
 - Add a TCP/WebSocket transport proxy for remote MCP connectivity.
 - Enrich `remove_entities` with API-specific multi-step sequences (deactivate/archive/unenroll) driven from `endpoints.ts`.
- - Introduce a “Hub” middleware to unify multiple “Core” servers (see HUB_CONCEPT.md).
+- Introduce a “Hub” middleware to unify multiple “Core” servers (see The_Hub/HUB_CONCEPT.md).

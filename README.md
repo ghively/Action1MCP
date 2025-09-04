@@ -89,4 +89,4 @@ If interrupted, check `RESUME_STATE.json`:
 
 ## Core vs. Hub (Concept)
 - Core: this standalone MCP server focused on one API (Action1) with a well-defined endpoint map and generic tools.
-- Hub (future concept): a unifying middleware that discovers and loads multiple cores as plugins, exposing a single connection point to clients. See `docs/HUB_CONCEPT.md` for a detailed brainstorming guide (no code included here).
+- Hub (future concept): a unifying middleware that discovers and loads multiple cores as plugins, exposing a single connection point to clients. See `The_Hub/HUB_CONCEPT.md` for a detailed brainstorming guide (no code included here).
