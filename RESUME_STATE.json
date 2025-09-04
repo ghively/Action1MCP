@@ -1,0 +1,42 @@
+{
+  "phase": "implement-tools",
+  "step_index": 5,
+  "generated_files": [
+    "package.json",
+    "tsconfig.json",
+    "src/endpoints.ts",
+    "src/lib/http.ts",
+    "src/lib/qs.ts",
+    "src/lib/logger.ts",
+    "src/lib/paginate.ts",
+    "src/lib/poll.ts",
+    "src/lib/resolve.ts",
+    "src/server.ts",
+    "README.md",
+    "vitest.config.ts",
+    "tests/qs.test.ts",
+    "tests/retry.test.ts",
+    "tests/paginate.test.ts",
+    "tests/resolve.test.ts",
+    "tests/http-auth.test.ts",
+    "Dockerfile",
+    ".env.example",
+    "scripts/audit-endpoints.mjs",
+    "BUILD_LOG.md",
+    "DEVIATIONS.md",
+    "RESUME_STATE.json"
+  ],
+  "env_requirements": [
+    "Node.js 20+",
+    "API_BASE",
+    "BEARER_TOKEN or API_TOKEN or ACTION1_TOKEN",
+    "ALLOW_DESTRUCTIVE (optional; defaults to false)"
+  ],
+  "pending_actions": [
+    "Expand endpoints/resources as new sections of the docs are added",
+    "Fill TODO shapes for create/update bodies from official references",
+    "Optionally add jobStatus once async job endpoints are confirmed",
+    "Wire richer orchestrations in remove_entities per API specifics"
+  ]
+}
+

@@ -1,0 +1,13 @@
+# Local environment files (never commit secrets)
+.env.local
+
+# Node build artifacts
+node_modules/
+dist/
+
+# Logs and coverage
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+coverage/
+
