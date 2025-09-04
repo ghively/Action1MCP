@@ -50,7 +50,7 @@ Dockerfile               # container build and run
 ## Extensibility & Middleware
 - Add endpoints: update `src/endpoints.ts` with new resources/actions and, if needed, zod body/param shapes. Then add a unit test and commit.
 - New tool: register in `server.ts` with a zod schema and re-use `http.ts`/`paginate.ts`.
-- Middleware options:
+- Middleware options (conceptual; no code in repo):
   - STDIO proxy: wrap this process with a proxy that forwards STDIO over WebSocket/HTTP2/SSH.
   - Sidecar HTTP gateway: expose a small HTTP server that translates HTTP requests to MCP tool calls locally (preserves auth in env on the server host). Useful when the MCP client cannot spawn processes.
   - Job/work queue: place destructive actions on a queue and process them with rate control, then report status via polling.
@@ -81,4 +81,4 @@ Dockerfile               # container build and run
 - Add rate-limit header parsing to adapt backoff dynamically.
 - Add a TCP/WebSocket transport proxy for remote MCP connectivity.
 - Enrich `remove_entities` with API-specific multi-step sequences (deactivate/archive/unenroll) driven from `endpoints.ts`.
-
+ - Introduce a “Hub” middleware to unify multiple “Core” servers (see HUB_CONCEPT.md).
