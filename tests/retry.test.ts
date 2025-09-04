@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { getWithRetry } from "../src/lib/http.js";
+import { getWithRetry } from "../src/lib/http.ts";
 
 const globalAny = global as any;
 
@@ -28,4 +28,3 @@ describe("getWithRetry", () => {
     await expect(getWithRetry("/bad")).rejects.toBeTruthy();
   });
 });
-

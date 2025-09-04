@@ -67,7 +67,7 @@ export async function* paginate<T = any>(
     let first = true;
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const data = await (first ? fetchPage(basePath, initialParams) : getWithRetry(next!));
+      const data: any = await (first ? fetchPage(basePath, initialParams) : getWithRetry(next!));
       const items: T[] = Array.isArray(data) ? data : data?.items ?? data?.data ?? [];
       yield items;
       first = false;
@@ -77,4 +77,3 @@ export async function* paginate<T = any>(
     return;
   }
 }
-

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { paginate } from "../src/lib/paginate.js";
-import { endpoints } from "../src/endpoints.js";
+import { paginate } from "../src/lib/paginate.ts";
+import { endpoints } from "../src/endpoints.ts";
 
 const globalAny = global as any;
 
@@ -27,4 +27,3 @@ describe("paginate (cursor)", () => {
     expect(got).toEqual([1, 2, 3]);
   });
 });
-

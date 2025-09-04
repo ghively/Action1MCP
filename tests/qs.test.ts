@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { qs } from "../src/lib/qs.js";
+import { qs } from "../src/lib/qs.ts";
 
 describe("qs", () => {
   it("skips undefined/null/empty", () => {
@@ -14,4 +14,3 @@ describe("qs", () => {
     expect(out).toContain("f=%7B%22g%22%3A1%7D");
   });
 });
-

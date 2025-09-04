@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { hx } from "../src/lib/http.js";
+import { hx } from "../src/lib/http.ts";
 
 const globalAny = global as any;
 
@@ -16,4 +16,3 @@ describe("http auth headers", () => {
     expect(capturedAuth).toBe("Bearer test-token");
   });
 });
-

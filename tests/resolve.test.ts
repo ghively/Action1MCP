@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { resolveToIds } from "../src/lib/resolve.js";
-import { endpoints } from "../src/endpoints.js";
+import { resolveToIds } from "../src/lib/resolve.ts";
+import { endpoints } from "../src/endpoints.ts";
 
 const globalAny = global as any;
 
@@ -21,4 +21,3 @@ describe("resolveToIds", () => {
     expect(res.map((r) => r.id)).toEqual(["1"]);
   });
 });
-

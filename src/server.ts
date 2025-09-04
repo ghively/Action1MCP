@@ -15,6 +15,14 @@ export function buildServer() {
     { capabilities: { tools: {} } }
   );
 
+  function registerTool<T extends z.ZodTypeAny>(
+    name: string,
+    schema: T,
+    handler: (input: z.infer<T>) => Promise<any>
+  ) {
+    return (server as any).tool?.(name, schema, handler);
+  }
+
   function allowDestructive(confirm?: string, dryRun?: boolean): { allowed: boolean; reason?: string } {
     if (dryRun) return { allowed: true };
     if (process.env.ALLOW_DESTRUCTIVE !== "true") {
@@ -26,16 +34,16 @@ export function buildServer() {
     return { allowed: true };
   }
 
-  server.tool(
+  registerTool(
     "list_resources",
-    {
+    z.object({
       resource: z.string(),
       filters: z.record(z.unknown()).optional(),
       page: z.number().int().positive().optional(),
       per_page: z.number().int().positive().optional(),
       cursor: z.string().optional(),
       orgId: z.union([z.string(), z.number()]).optional()
-    },
+    }),
     async (input) => {
       const res = endpoints.resources[input.resource];
       if (!res?.list) {
@@ -66,9 +74,9 @@ export function buildServer() {
     }
   );
 
-  server.tool(
+  registerTool(
     "get_resource",
-    { resource: z.string(), id: z.union([z.string(), z.number()]), orgId: z.union([z.string(), z.number()]).optional() },
+    z.object({ resource: z.string(), id: z.union([z.string(), z.number()]), orgId: z.union([z.string(), z.number()]).optional() }),
     async (input) => {
       const res = endpoints.resources[input.resource];
       if (!res?.get) return { content: [{ type: "text", text: `Resource "${input.resource}" is not gettable.` }] };
@@ -86,15 +94,15 @@ export function buildServer() {
     }
   );
 
-  server.tool(
+  registerTool(
     "create_resource",
-    {
+    z.object({
       resource: z.string(),
       body: z.record(z.unknown()),
       orgId: z.union([z.string(), z.number()]).optional(),
       dry_run: z.boolean().optional(),
       confirm: z.enum(["YES"]).optional()
-    },
+    }),
     async (input) => {
       const guard = allowDestructive(input.confirm, input.dry_run);
       if (!guard.allowed) return { content: [{ type: "text", text: guard.reason! }] };
@@ -113,16 +121,16 @@ export function buildServer() {
     }
   );
 
-  server.tool(
+  registerTool(
     "update_resource",
-    {
+    z.object({
       resource: z.string(),
       id: z.union([z.string(), z.number()]),
       body: z.record(z.unknown()),
       orgId: z.union([z.string(), z.number()]).optional(),
       dry_run: z.boolean().optional(),
       confirm: z.enum(["YES"]).optional()
-    },
+    }),
     async (input) => {
       const guard = allowDestructive(input.confirm, input.dry_run);
       if (!guard.allowed) return { content: [{ type: "text", text: guard.reason! }] };
@@ -143,15 +151,15 @@ export function buildServer() {
     }
   );
 
-  server.tool(
+  registerTool(
     "delete_resource",
-    {
+    z.object({
       resource: z.string(),
       id: z.union([z.string(), z.number()]),
       orgId: z.union([z.string(), z.number()]).optional(),
       dry_run: z.boolean().optional(),
       confirm: z.enum(["YES"]).optional()
-    },
+    }),
     async (input) => {
       const guard = allowDestructive(input.confirm, input.dry_run);
       if (!guard.allowed) return { content: [{ type: "text", text: guard.reason! }] };
@@ -172,9 +180,9 @@ export function buildServer() {
     }
   );
 
-  server.tool(
+  registerTool(
     "call_action",
-    {
+    z.object({
       action: z.string(),
       body: z.record(z.unknown()).optional(),
       orgId: z.union([z.string(), z.number()]).optional(),
@@ -183,7 +191,7 @@ export function buildServer() {
       wait_timeout_s: z.number().int().positive().optional(),
       dry_run: z.boolean().optional(),
       confirm: z.enum(["YES"]).optional()
-    },
+    }),
     async (input) => {
       const guard = allowDestructive(input.confirm, input.dry_run);
       if (!guard.allowed) return { content: [{ type: "text", text: guard.reason! }] };
@@ -211,9 +219,9 @@ export function buildServer() {
     }
   );
 
-  server.tool(
+  registerTool(
     "remove_entities",
-    {
+    z.object({
       resource: z.string(),
       ids: z.array(z.union([z.string(), z.number()])).optional(),
       names: z.array(z.string()).optional(),
@@ -226,7 +234,7 @@ export function buildServer() {
       dry_run: z.boolean().default(false).optional(),
       confirm: z.enum(["YES"]).optional(),
       orgId: z.union([z.string(), z.number()]).optional()
-    },
+    }),
     async (input) => {
       const guard = allowDestructive(input.confirm, input.dry_run);
       if (!guard.allowed) return { content: [{ type: "text", text: guard.reason! }] };
@@ -250,10 +258,32 @@ export function buildServer() {
       const results: any[] = [];
       for (const op of ops) {
         if (op.kind === "delete_resource") {
-          const res = input.dry_run
-            ? { dry_run: true, op }
-            : await server.invokeTool("delete_resource", { resource: op.resource, id: op.id, orgId: input.orgId, confirm: input.confirm });
-          results.push({ target: op.id, result: res });
+          if (input.dry_run) {
+            results.push({ target: op.id, result: { dry_run: true, op } });
+          } else {
+            // Build path and call DELETE directly to avoid SDK method coupling
+            const desc = endpoints.resources[op.resource]?.delete;
+            if (!desc) {
+              results.push({ target: op.id, error: `No delete descriptor for ${op.resource}` });
+              continue;
+            }
+            const needsOrg = desc.path.includes("{orgId}");
+            if (needsOrg && input.orgId == null) {
+              results.push({ target: op.id, error: `orgId required for ${op.resource}` });
+              continue;
+            }
+            const params: Record<string, string | number> = {};
+            if (needsOrg) params.orgId = input.orgId!;
+            if (desc.path.includes("{endpointId}")) params.endpointId = op.id;
+            if (desc.path.includes("{groupId}")) params.groupId = op.id;
+            const delPath = interpolatePath(desc.path, params);
+            try {
+              const data = await hx(delPath, { method: "DELETE" });
+              results.push({ target: op.id, result: data ?? { deleted: true } });
+            } catch (e: any) {
+              results.push({ target: op.id, error: e?.message || String(e) });
+            }
+          }
         }
       }
       return { content: [{ type: "json", json: { executed: results.length, results } }] };
@@ -272,4 +302,3 @@ export async function startServerIfNeeded() {
 }
 
 await startServerIfNeeded();
-
