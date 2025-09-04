@@ -13,18 +13,20 @@ const REDACT_KEYS = [
 ];
 
 function redact(value: unknown): unknown {
-  if (typeof value === "string") {
-    return value.length > 0 ? "[REDACTED]" : "[REDACTED]";
-  }
   if (Array.isArray(value)) {
-    return value.map(redact);
+    return value.map((v) => redact(v));
   }
   if (value && typeof value === "object") {
     const out: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
-      out[k] = REDACT_KEYS.some((rk) => k.toLowerCase().includes(rk))
-        ? "[REDACTED]"
-        : redact(v);
+      const lower = k.toLowerCase();
+      if (REDACT_KEYS.some((rk) => lower.includes(rk))) {
+        out[k] = "[REDACTED]";
+      } else if (typeof v === "object") {
+        out[k] = redact(v);
+      } else {
+        out[k] = v;
+      }
     }
     return out;
   }
@@ -41,4 +43,3 @@ export function log(level: LogLevel, msg: string, meta?: Record<string, unknown>
   // eslint-disable-next-line no-console
   console[level === "error" ? "error" : "log"](JSON.stringify(entry));
 }
-
