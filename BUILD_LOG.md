@@ -62,3 +62,8 @@
 - Deviation tracking: `DEVIATIONS.md` created.
 - Resume state: `RESUME_STATE.json` created.
 
+9) External discovery pass (web)
+- Fetched landing pages: api-documentation and REST API overview; content is HTML with minimal embedded endpoint specs.
+- Attempted OpenAPI at `/api/3.0/openapi.{json,yaml}` → received 403. No public spec retrieved.
+- Implemented all endpoints explicitly listed in local docs (APIinfo.md), including search, status, agent installation, deployers, remote sessions.
+- Added CI workflow and documentation.
