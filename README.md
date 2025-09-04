@@ -65,6 +65,9 @@ Tests mock `fetch` and validate query-string, retry logic, pagination, resolver,
 ## Tool Reference
 See `docs/TOOLS.md` for inputs, guardrails, and examples for each tool.
 
+## MCP Clients
+- Claude Desktop and generic client setup are documented in `docs/CLIENTS.md` with config snippets and env examples.
+
 ## Resume Guide
 If interrupted, check `RESUME_STATE.json`:
 - Identify `phase` and `step_index` (from `BUILD_LOG.md`).
