@@ -121,6 +121,11 @@ export const endpoints: EndpointsSpec = {
       // TODO: add get/create/update/delete when documented explicitly
     },
 
+    // Endpoint connection status
+    endpoints_status: {
+      list: { path: "/endpoints/status/{orgId}", method: "GET", paramsSchema: orgParam }
+    },
+
     // Endpoint Management
     endpoints: {
       list: { path: "/endpoints/managed/{orgId}", method: "GET", paramsSchema: orgParam },
