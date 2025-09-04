@@ -114,7 +114,12 @@ export function buildServer() {
 
   registerTool(
     "get_resource",
-    z.object({ resource: z.string(), id: z.union([z.string(), z.number()]), orgId: z.union([z.string(), z.number()]).optional() }),
+    z.object({
+      resource: z.string(),
+      id: z.union([z.string(), z.number()]),
+      orgId: z.union([z.string(), z.number()]).optional(),
+      endpointId: z.union([z.string(), z.number()]).optional()
+    }),
     async (input) => {
       const res = endpoints.resources[input.resource];
       if (!res?.get) return { content: [{ type: "text", text: `Resource "${input.resource}" is not gettable.` }] };
@@ -124,8 +129,9 @@ export function buildServer() {
         if (input.orgId == null) return { content: [{ type: "text", text: `orgId is required for resource "${input.resource}".` }] };
         params.orgId = input.orgId;
       }
-      if (path.includes("{endpointId}")) params.endpointId = input.id;
+      if (path.includes("{endpointId}")) params.endpointId = input.endpointId ?? input.id;
       if (path.includes("{groupId}")) params.groupId = input.id;
+      if (path.includes("{installType}")) (params as any).installType = input.id;
       path = interpolatePath(path, params);
       const data = await getWithRetry(path);
       return { content: [{ type: "json", json: data }] };
@@ -166,6 +172,7 @@ export function buildServer() {
       id: z.union([z.string(), z.number()]),
       body: z.record(z.unknown()),
       orgId: z.union([z.string(), z.number()]).optional(),
+      endpointId: z.union([z.string(), z.number()]).optional(),
       dry_run: z.boolean().optional(),
       confirm: z.enum(["YES"]).optional()
     }),
@@ -180,7 +187,7 @@ export function buildServer() {
         if (input.orgId == null) return { content: [{ type: "text", text: `orgId is required for "${input.resource}".` }] };
         params.orgId = input.orgId;
       }
-      if (path.includes("{endpointId}")) params.endpointId = input.id;
+      if (path.includes("{endpointId}")) params.endpointId = input.endpointId ?? input.id;
       if (path.includes("{groupId}")) params.groupId = input.id;
       path = interpolatePath(path, params);
       if (input.dry_run) return { content: [{ type: "json", json: { path, body: input.body, dry_run: true } }] };

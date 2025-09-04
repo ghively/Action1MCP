@@ -140,6 +140,19 @@ export const endpoints: EndpointsSpec = {
       subresources: {
         missingUpdates: {
           list: { path: "/endpoints/managed/{orgId}/{endpointId}/missing-updates", method: "GET", paramsSchema: endpointParams }
+        },
+        remoteSessions: {
+          get: {
+            path: "/endpoints/managed/{orgId}/{endpointId}/remote-sessions/{sessionId}",
+            method: "GET",
+            paramsSchema: endpointParams.extend({ sessionId: z.union([z.string(), z.number()]) })
+          },
+          update: {
+            path: "/endpoints/managed/{orgId}/{endpointId}/remote-sessions/{sessionId}",
+            method: "PATCH",
+            paramsSchema: endpointParams.extend({ sessionId: z.union([z.string(), z.number()]) }),
+            bodySchema: z.record(z.string(), z.unknown())
+          }
         }
       }
     },
@@ -198,6 +211,14 @@ export const endpoints: EndpointsSpec = {
         method: "PATCH",
         paramsSchema: orgParam,
         bodySchema: z.record(z.string(), z.unknown())
+      }
+    },
+    // Agent installation URL retrieval
+    agent_installation: {
+      get: {
+        path: "/endpoints/agent-installation/{orgId}/{installType}",
+        method: "GET",
+        paramsSchema: orgParam.extend({ installType: z.string() })
       }
     },
     deployers: {
