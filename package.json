@@ -1,0 +1,26 @@
+{
+  "name": "action1-mcp-server",
+  "version": "0.1.0",
+  "description": "Model Context Protocol (MCP) server adapter for the Action1 REST API (via provided docs).",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node --enable-source-maps --env-file=.env.local dist/server.js",
+    "start": "node --enable-source-maps dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint:md": "echo \"Optional: markdownlint **/*.md\"",
+    "audit:endpoints": "node scripts/audit-endpoints.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.2.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
+  }
+}
+
