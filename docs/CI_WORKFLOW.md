@@ -13,9 +13,9 @@ This repository includes a GitHub Actions workflow to automatically install, bui
 - Steps:
   - `npm ci || npm install`: install dependencies (supports both lockfile/no-lockfile).
   - `npm run build`: compile TypeScript.
-  - `npm test`: run vitest suite (mocked `fetch`, no live calls).
+  - `npm test -- --coverage`: run vitest suite (mocked `fetch`) with coverage thresholds.
   - `npm run audit:endpoints`: print Spec Audit header and counts.
-  - Uploads `dist/` as an artifact for quick download.
+  - Uploads `dist/` and `coverage/` as artifacts for download.
 
 ## File
 - Workflow: `.github/workflows/ci.yml`
@@ -41,9 +41,9 @@ Add this to `README.md` (replace `OWNER/REPO`):
 - Add coverage: configure vitest coverage, then add a `Run coverage` step.
 - Lint: add steps for ESLint/markdownlint if you introduce those tools.
 - Matrix: expand to multiple Node versions via `strategy.matrix.node-version`.
+ - Codecov/coveralls: integrate a coverage upload step if using a coverage service.
 
 ## Troubleshooting
 - NPM cache misses: ensure lockfile is committed for stable CI performance.
 - TypeScript path issues: confirm `tsconfig.json` includes the intended files.
 - Failing tests: open the run logs for error details; replicate locally with `npm test`.
-

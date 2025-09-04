@@ -1,6 +1,6 @@
 # MCP Tools Reference
 
-Each tool returns `{ content: [{ type: "json", json }] }` on success or a short text message when guardrails block execution.
+Each tool returns `{ content: [{ type: "json", json }] }` on success or a short text message when guardrails block execution. All inputs are validated with zod; unexpected fields are preserved via `.passthrough()` where payloads are not fully specified in docs.
 
 ## list_resources
 - Inputs: `{ resource: string, filters?: object, page?: number, per_page?: number, cursor?: string, orgId?: string|number }`
@@ -10,6 +10,7 @@ Each tool returns `{ content: [{ type: "json", json }] }` on success or a short 
 ## get_resource
 - Inputs: `{ resource: string, id: string|number, orgId?: string|number }`
 - Behavior: Calls the resource `get` endpoint; interpolates `{id}` into path-specific keys (e.g., `{endpointId}`).
+ - Tips: For subresources requiring both `endpointId` and another `id` (like `sessionId`), pass `endpointId` explicitly; `id` maps to the trailing placeholder.
 
 ## create_resource
 - Inputs: `{ resource: string, body: object, orgId?: string|number, dry_run?: boolean, confirm?: "YES" }`
@@ -18,6 +19,7 @@ Each tool returns `{ content: [{ type: "json", json }] }` on success or a short 
 ## update_resource
 - Inputs: `{ resource: string, id: string|number, body: object, orgId?: string|number, dry_run?: boolean, confirm?: "YES" }`
 - Guardrails: Same as create.
+ - Tips: For subresources requiring both `endpointId` and another `id`, provide `endpointId` explicitly.
 
 ## delete_resource
 - Inputs: `{ resource: string, id: string|number, orgId?: string|number, dry_run?: boolean, confirm?: "YES" }`
@@ -46,3 +48,4 @@ Each tool returns `{ content: [{ type: "json", json }] }` on success or a short 
 - Agent installation URL: `get_resource` with `resource:"agent_installation"`, `orgId:"123"`, `id:"windowsEXE"` (mapped to `{installType}`).
 - Deployer installer URL: `list_resources` with `resource:"deployer_installation_windows"`, `orgId:"123"`.
 - Remote session status: `get_resource` with `resource:"endpoints.remoteSessions"`, `orgId:"123"`, `endpointId:"ep-1"`, `id:"sess-1"`.
+ - Endpoint status snapshot: `list_resources` with `resource:"endpoints_status"`, `orgId:"123"`.

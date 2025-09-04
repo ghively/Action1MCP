@@ -1,6 +1,15 @@
 # Action1 MCP Server (via REST Docs)
 
-This project provides a Model Context Protocol (MCP) server adapter for the Action1 API using only the included documentation. It exposes generic tools (list/get/create/update/delete) and safe orchestrations over declared endpoints.
+This project provides a Model Context Protocol (MCP) server adapter for the Action1 API using only the included documentation. It exposes generic tools (list/get/create/update/delete) and safe orchestrations over declared endpoints. It is designed to be extended and embedded in larger ecosystems.
+
+## Table of Contents
+- Overview
+- Environment and Setup
+- Tools and Guardrails
+- Clients (Claude Desktop and generic)
+- Architecture and Deployment
+- CI and Testing
+- Resume Guide
 
 ## Architecture
 ```
@@ -77,3 +86,7 @@ If interrupted, check `RESUME_STATE.json`:
 - Identify `phase` and `step_index` (from `BUILD_LOG.md`).
 - Continue by editing/adding the next files listed in `pending_actions`.
 - Re-run `npm run build` and `npm test` to validate progress.
+
+## Core vs. Hub (Concept)
+- Core: this standalone MCP server focused on one API (Action1) with a well-defined endpoint map and generic tools.
+- Hub (future concept): a unifying middleware that discovers and loads multiple cores as plugins, exposing a single connection point to clients. See `docs/HUB_CONCEPT.md` for a detailed brainstorming guide (no code included here).
