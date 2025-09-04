@@ -180,6 +180,11 @@ export const endpoints: EndpointsSpec = {
       }
     },
 
+    // Search (organization-scoped)
+    search: {
+      list: { path: "/search/{orgId}", method: "GET", paramsSchema: orgParam }
+    },
+
     // Agent Deployment
     agent_deployment: {
       get: { path: "/endpoints/agent-deployment/{orgId}", method: "GET", paramsSchema: orgParam },
@@ -230,4 +235,3 @@ export function interpolatePath(
     return encodeURIComponent(String(v));
   });
 }
-
