@@ -68,6 +68,10 @@ See `docs/TOOLS.md` for inputs, guardrails, and examples for each tool.
 ## MCP Clients
 - Claude Desktop and generic client setup are documented in `docs/CLIENTS.md` with config snippets and env examples.
 
+## Architecture & Deployment
+- Architecture details: see `docs/ARCHITECTURE.md` (file layout, data flow, logic, extension points).
+- Deployment options: see `docs/DEPLOYMENT.md` (local, Docker, Compose, remote patterns, middleware ideas).
+
 ## Resume Guide
 If interrupted, check `RESUME_STATE.json`:
 - Identify `phase` and `step_index` (from `BUILD_LOG.md`).

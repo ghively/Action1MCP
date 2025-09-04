@@ -1,0 +1,10 @@
+services:
+  action1-mcp:
+    build: .
+    environment:
+      API_BASE: https://app.action1.com/api/3.0
+      BEARER_TOKEN: ${BEARER_TOKEN}
+      ALLOW_DESTRUCTIVE: "false"
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
