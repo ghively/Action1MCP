@@ -138,6 +138,10 @@ export const endpoints: EndpointsSpec = {
       },
       delete: { path: "/endpoints/managed/{orgId}/{endpointId}", method: "DELETE", paramsSchema: endpointParams },
       subresources: {
+        // Some responses reference a "/general" subresource. Add it explicitly for clarity.
+        general: {
+          get: { path: "/endpoints/managed/{orgId}/{endpointId}/general", method: "GET", paramsSchema: endpointParams }
+        },
         missingUpdates: {
           list: { path: "/endpoints/managed/{orgId}/{endpointId}/missing-updates", method: "GET", paramsSchema: endpointParams }
         },
