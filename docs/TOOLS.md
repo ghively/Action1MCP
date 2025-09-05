@@ -48,7 +48,15 @@ Each tool returns `{ content: [{ type: "json", json }] }` on success or a short 
 - Agent installation URL: `get_resource` with `resource:"agent_installation"`, `orgId:"123"`, `id:"windowsEXE"` (mapped to `{installType}`).
 - Deployer installer URL: `list_resources` with `resource:"deployer_installation_windows"`, `orgId:"123"`.
 - Remote session status: `get_resource` with `resource:"endpoints.remoteSessions"`, `orgId:"123"`, `endpointId:"ep-1"`, `id:"sess-1"`.
-- Endpoint status snapshot: `list_resources` with `resource:"endpoints_status"`, `orgId:"123"`.
+ - Endpoint status snapshot: `list_resources` with `resource:"endpoints_status"`, `orgId:"123"`.
+
+## Typed bodies and filters (lightweight)
+- Endpoint groups create/update:
+  - Body fields supported: `name`, `description`, `include_filter[]`, `exclude_filter[]`, `uptime_alerts`.
+  - `include_filter[]` / `exclude_filter[]` item: `{ field_name: string, field_value: string, mode?: "include"|"exclude" }`
+  - `uptime_alerts`: `{ offline_alerts_enabled?: "yes"|"no", offline_alerts_delay?: number, online_alerts_enabled?: "yes"|"no", user_ids_for_notification?: (string|number)[] }`
+
+These additions remain permissive (`.passthrough()`), so undocumented fields are preserved.
 
 ## Convenience tools
 
