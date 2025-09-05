@@ -105,6 +105,21 @@ const deployerParams = orgParam.extend({
   deployerId: z.union([z.string(), z.number()])
 });
 
+// Lightweight shapes inferred from live audit
+const groupFilterSchema = z.object({
+  field_name: z.string(),
+  field_value: z.string(),
+  // Some payloads carry explicit mode; allow either explicit or implicit by list placement
+  mode: z.enum(["include", "exclude"]).optional()
+});
+
+const uptimeAlertsSchema = z.object({
+  offline_alerts_enabled: z.union([z.literal("yes"), z.literal("no")]).optional(),
+  offline_alerts_delay: z.number().int().nonnegative().optional(),
+  online_alerts_enabled: z.union([z.literal("yes"), z.literal("no")]).optional(),
+  user_ids_for_notification: z.array(z.union([z.string(), z.number()])).optional()
+});
+
 export const endpoints: EndpointsSpec = {
   baseUrl: "https://app.action1.com/api/3.0",
   auth: {
@@ -170,8 +185,11 @@ export const endpoints: EndpointsSpec = {
         paramsSchema: orgParam,
         bodySchema: z
           .object({
-            name: z.string().min(1)
-            // TODO: add other group properties when specified
+            name: z.string().min(1),
+            description: z.string().optional(),
+            include_filter: z.array(groupFilterSchema).optional(),
+            exclude_filter: z.array(groupFilterSchema).optional(),
+            uptime_alerts: uptimeAlertsSchema.optional()
           })
           .passthrough()
       },
@@ -180,7 +198,15 @@ export const endpoints: EndpointsSpec = {
         path: "/endpoints/groups/{orgId}/{groupId}",
         method: "PATCH",
         paramsSchema: groupParams,
-        bodySchema: z.record(z.string(), z.unknown())
+        bodySchema: z
+          .object({
+            name: z.string().min(1).optional(),
+            description: z.string().optional(),
+            include_filter: z.array(groupFilterSchema).optional(),
+            exclude_filter: z.array(groupFilterSchema).optional(),
+            uptime_alerts: uptimeAlertsSchema.optional()
+          })
+          .passthrough()
       },
       delete: { path: "/endpoints/groups/{orgId}/{groupId}", method: "DELETE", paramsSchema: groupParams },
       subresources: {
