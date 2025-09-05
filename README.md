@@ -25,8 +25,11 @@ This project provides a Model Context Protocol (MCP) server adapter for the Acti
 
 Env vars:
 - `API_BASE` (e.g., https://app.action1.com/api/3.0)
-- `BEARER_TOKEN` (or `API_TOKEN`, `ACTION1_TOKEN`)
+- Auth options:
+  - `BEARER_TOKEN` (preferred), or `API_TOKEN`, or `ACTION1_TOKEN` — a ready access token.
+  - Or provide `ACTION1_CLIENT_ID` and `ACTION1_CLIENT_SECRET` to let the server exchange them for an access token at `${API_BASE}/oauth2/token` automatically.
 - `ALLOW_DESTRUCTIVE` (default false; set to `true` to enable destructive tools)
+- `ORG_ID` (optional default organization id; used when a tool call omits `orgId`)
 
 ## Setup
 ```bash
