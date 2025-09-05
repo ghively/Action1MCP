@@ -40,6 +40,13 @@ export function log(level: LogLevel, msg: string, meta?: Record<string, unknown>
     msg,
     ...(meta ? { meta: redact(meta) } : {})
   };
-  // eslint-disable-next-line no-console
-  console[level === "error" ? "error" : "log"](JSON.stringify(entry));
+  // Write all logs to stderr to avoid corrupting MCP STDIO on stdout
+  try {
+    // Prefer direct stderr write to prevent console formatting
+    process.stderr.write(`${JSON.stringify(entry)}\n`);
+  } catch {
+    // Fallback if stderr is unavailable
+    // eslint-disable-next-line no-console
+    console.error(JSON.stringify(entry));
+  }
 }

@@ -48,4 +48,46 @@ Each tool returns `{ content: [{ type: "json", json }] }` on success or a short 
 - Agent installation URL: `get_resource` with `resource:"agent_installation"`, `orgId:"123"`, `id:"windowsEXE"` (mapped to `{installType}`).
 - Deployer installer URL: `list_resources` with `resource:"deployer_installation_windows"`, `orgId:"123"`.
 - Remote session status: `get_resource` with `resource:"endpoints.remoteSessions"`, `orgId:"123"`, `endpointId:"ep-1"`, `id:"sess-1"`.
- - Endpoint status snapshot: `list_resources` with `resource:"endpoints_status"`, `orgId:"123"`.
+- Endpoint status snapshot: `list_resources` with `resource:"endpoints_status"`, `orgId:"123"`.
+
+## Convenience tools
+
+- list_endpoints_simple
+  - Inputs: `{ orgId?: string|number, query?: string, limit?: number }`
+  - Behavior: Lists managed endpoints and returns simplified fields `{id,name,hostname,os,groupId,lastSeen}`; client-side `query` filter and `limit` slice.
+
+- start_remote_session
+  - Inputs: `{ orgId?: string|number, endpointId: string|number, body?: object, dry_run?: boolean, confirm?: "YES" }`
+  - Behavior: POST to `/endpoints/managed/{orgId}/{endpointId}/remote-sessions` (uses configured action). Supports dry-run and guardrails.
+
+- get_agent_installation_links
+  - Inputs: `{ orgId?: string|number, installType?: "windowsEXE" }`
+  - Behavior: GET `/endpoints/agent-installation/{orgId}/{installType}` and returns the response.
+
+- list_endpoint_status
+  - Inputs: `{ orgId?: string|number, query?: string, limit?: number }`
+  - Behavior: GET `/endpoints/status/{orgId}`, optional client-side `query` filter and `limit` slice.
+
+- inspect_deployer
+  - Inputs: `{ orgId?: string|number, deployerId: string|number }`
+  - Behavior: GET `/endpoints/deployers/{orgId}/{deployerId}`.
+
+- delete_deployer
+  - Inputs: `{ orgId?: string|number, deployerId: string|number, dry_run?: boolean, confirm?: "YES" }`
+  - Behavior: DELETE `/endpoints/deployers/{orgId}/{deployerId}`; guardrails apply.
+
+- modify_group_contents
+  - Inputs: `{ orgId?: string|number, groupId: string|number, add?: (string|number)[], remove?: (string|number)[], dry_run?: boolean, confirm?: "YES" }`
+  - Behavior: POST to `/endpoints/groups/{orgId}/{groupId}/contents` with `{ add?, remove? }` payload; guardrails apply.
+
+- move_endpoint_simple
+  - Inputs: `{ orgId?: string|number, endpointId: string|number, targetOrgId: string|number, dry_run?: boolean, confirm?: "YES" }`
+  - Behavior: Calls action `move_endpoint`.
+
+- get_missing_updates
+  - Inputs: `{ orgId?: string|number, endpointId: string|number }`
+  - Behavior: GET `/endpoints/managed/{orgId}/{endpointId}/missing-updates`.
+
+- get_remote_session_status
+  - Inputs: `{ orgId?: string|number, endpointId: string|number, sessionId: string|number }`
+  - Behavior: GET `/endpoints/managed/{orgId}/{endpointId}/remote-sessions/{sessionId}`.
