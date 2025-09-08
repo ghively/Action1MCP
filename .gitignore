@@ -11,3 +11,5 @@ yarn-error.log*
 pnpm-debug.log*
 coverage/
 
+# Ignore nested The_Hub repo in parent
+The_Hub/
