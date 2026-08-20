@@ -26,9 +26,9 @@ This repository includes a GitHub Actions workflow to automatically install, bui
 - Artifacts: open a successful run and download the `dist` artifact.
 
 ## Status badge
-Add this to `README.md` (replace `OWNER/REPO`):
+This is already added to `README.md`:
 ```
-![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/ghively/Action1MCP/actions/workflows/ci.yml/badge.svg)
 ```
 
 ## Secrets and safety
