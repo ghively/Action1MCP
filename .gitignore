@@ -1,15 +1,24 @@
 # Local environment files (never commit secrets)
+.env
 .env.local
 
 # Node build artifacts
 node_modules/
 dist/
 
+# Compiled test output (sources are the .ts files under tests/)
+tests/*.js
+tests/*.js.map
+tests/*.d.ts
+
 # Logs and coverage
 npm-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 coverage/
+
+# Editor / agent local state
+.claude/
 
 # Ignore nested The_Hub repo in parent
 The_Hub/
