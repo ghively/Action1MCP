@@ -1,5 +1,7 @@
 # Action1 MCP Server (via REST Docs)
 
+![CI](https://github.com/ghively/Action1MCP/actions/workflows/ci.yml/badge.svg)
+
 This project provides a Model Context Protocol (MCP) server adapter for the Action1 API using only the included documentation. It exposes generic tools (list/get/create/update/delete) and safe orchestrations over declared endpoints. It is designed to be extended and embedded in larger ecosystems.
 
 ## Table of Contents
@@ -9,7 +11,6 @@ This project provides a Model Context Protocol (MCP) server adapter for the Acti
 - Clients (Claude Desktop and generic)
 - Architecture and Deployment
 - CI and Testing
-- Resume Guide
 
 ## Architecture
 ```
@@ -83,12 +84,6 @@ See `docs/TOOLS.md` for inputs, guardrails, and examples for each tool.
 ## Architecture & Deployment
 - Architecture details: see `docs/ARCHITECTURE.md` (file layout, data flow, logic, extension points).
 - Deployment options: see `docs/DEPLOYMENT.md` (local, Docker, Compose, remote patterns, middleware ideas).
-
-## Resume Guide
-If interrupted, check `RESUME_STATE.json`:
-- Identify `phase` and `step_index` (from `BUILD_LOG.md`).
-- Continue by editing/adding the next files listed in `pending_actions`.
-- Re-run `npm run build` and `npm test` to validate progress.
 
 ## Core vs. Hub (Concept)
 - Core: this standalone MCP server focused on one API (Action1) with a well-defined endpoint map and generic tools.

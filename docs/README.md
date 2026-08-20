@@ -10,6 +10,5 @@
 
 ## Existing References
 - Action1 API: see `../Action1_API_Documentation.md`.
-- API Notes: see `../APIinfo.md`.
 - Offline Agent Install: see `../Action1_API_Agent_Installation_Offline_Reference.md`.
 

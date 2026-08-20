@@ -1,16 +1,17 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- Docs live at the repository root. Key files:
+- This is a Node.js/TypeScript MCP server (`src/`, `tests/`, `docs/`), not a docs-only repository.
+- Reference docs live at the repository root alongside the code. Key files:
   - `README.md`: project overview and entry point.
   - `Action1_API_Documentation.md`: primary API reference.
   - `Action1_API_Agent_Installation_Offline_Reference.md`: offline agent install guide.
-  - `APIinfo.md`: supplemental API notes.
-- New documents: add Markdown files at the root alongside existing docs. If adding a larger set of pages, propose a `docs/` folder in your PR and describe the layout.
+- New documents: add Markdown files at the root alongside existing docs, or under `docs/` for larger sets of pages.
 
 ## Build, Test, and Development Commands
-- Build: none required (Markdown-only repository).
-- Preview: use your editor’s Markdown preview (e.g., VS Code).
+- Build: `npm run build` (TypeScript, via `tsc`).
+- Test: `npm test` (vitest); `npm test -- --coverage` for coverage.
+- Preview docs: use your editor’s Markdown preview (e.g., VS Code).
 - Optional lint (if installed locally): `markdownlint **/*.md`
 - Optional format (if installed): `prettier --write "**/*.md"`
 - Optional link check: `markdown-link-check Action1_API_Documentation.md`
