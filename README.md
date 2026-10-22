@@ -4,6 +4,36 @@
 
 This project provides a Model Context Protocol (MCP) server adapter for the Action1 API using only the included documentation. It exposes generic tools (list/get/create/update/delete) and safe orchestrations over declared endpoints. It is designed to be extended and embedded in larger ecosystems.
 
+## Start here (2-minute tour)
+
+The core code is small. Read these in order:
+
+| What | Where |
+|---|---|
+| Tool registration and input schemas (zod) | [`src/server.ts`](src/server.ts) (`registerTool`) |
+| Declared endpoints (the only API surface exposed) | [`src/endpoints.ts`](src/endpoints.ts) |
+| HTTP, auth, GET-only retry with backoff on 429/5xx | [`src/lib/http.ts`](src/lib/http.ts) |
+| Destructive-action gate | [`src/lib/guard.ts`](src/lib/guard.ts) |
+| Pagination and name-to-ID resolution | [`src/lib/paginate.ts`](src/lib/paginate.ts), [`src/lib/resolve.ts`](src/lib/resolve.ts) |
+| Tests (all mocked, no Action1 account needed) | [`tests/`](tests/) |
+
+```bash
+npm ci && npm run build && npm test     # 20 tests, no credentials, no network
+```
+
+What the tests pin down:
+
+- **Mutations are gated twice.** `ALLOW_DESTRUCTIVE=true` must be set for the process
+  *and* each call must pass `confirm:"YES"`. Anything else is denied; `dry_run` is always
+  allowed because it never mutates (`tests/guard.test.ts`).
+- **Only safe reads retry.** GETs retry on 429/502/503/504 with exponential backoff and
+  jitter; 4xx errors fail fast (`tests/retry.test.ts`). POST/DELETE are attempted exactly
+  once, even on 429/503, so a retry can never duplicate a change (`tests/guard.test.ts`).
+- **Curated operations, not arbitrary HTTP.** Tools only reach endpoints declared in
+  `src/endpoints.ts`; see [docs/implementation-decisions.md](docs/implementation-decisions.md).
+
+Live testing against a real Action1 tenant is optional and separate from CI.
+
 ## Table of Contents
 - Overview
 - Environment and Setup
