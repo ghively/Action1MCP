@@ -1,21 +1,21 @@
 # Action1 API Documentation & Integration Guide
 
-OAS  
-3.1
--------------------------------------
-This specification defines Action1 RESTful API for integrations. With this API, you can query managed endpoints, list vulnerabilities and missing updates, generate reports, create and launch automations and more. Use this API to integrate your applications with Action1. For simplified API scripting experience, we recommend using [PSAction1](https://www.action1.com/psaction1/)
+The official reference is Action1's interactive API documentation at
+https://app.action1.com/apidocs/ (OpenAPI 3.1). This file doesn't copy it.
+It keeps short integration notes in our own words, with links to Action1's
+pages for the details.
 
-[Terms of service](https://www.action1.com/terms-of-use/)[Action1 Support  
-- Website](https://app.action1.com/support)Servers<select aria-haspopup="menu" value="https://app.action1.com/api/3.0" node="2848"><menu><option selected="" node="3118">https://app.action1.com/api/3.0</option><option node="3120">API - Global: North America</option><option node="3123">https://app.eu.action1.com/api/3.0 - Europe</option><option node="3126">https://app.au.action1.com/api/3.0 - Australia</option></menu></select>Authorize
+**API base URLs by region:**
 
-### [OAuth 2.0](https://app.action1.com/apidocs/#/OAuth%202.0)
+- North America: `https://app.action1.com/api/3.0`
+- Europe: `https://app.eu.action1.com/api/3.0`
+- Australia: `https://app.au.action1.com/api/3.0`
 
-Authorize API calls with API credentials (Client ID and Client Secret) generated in Action1 console. After executing the authentication request, extract the 'access\_token' from its response and pass it as a header ('Authorization: Bearer access\_token') in every subsequent API call. If you use this API documentation system to interact with the API, click the Authorize button at the top, and provide the Client ID and Client Secret to generate tokens automatically.
-
-...truncated for demonstration
+**Auth in one line:** exchange the Client ID and Client Secret generated in the
+Action1 console for an access token, then send `Authorization: Bearer <token>`
+on every call. See [API Authentication](https://www.action1.com/api-documentation/authentication/).
 
 ---
-
 
 # Action1 API Integration: Best Practices & Tips
 
