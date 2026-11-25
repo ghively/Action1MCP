@@ -9,6 +9,7 @@ import { paginate } from "./lib/paginate.js";
 import { pollJob } from "./lib/poll.js";
 import { resolveToIds } from "./lib/resolve.js";
 import { log } from "./lib/logger.js";
+import { allowDestructive } from "./lib/guard.js";
 
 export function buildServer() {
   const server = new McpServer(
@@ -388,16 +389,6 @@ export function buildServer() {
     }
   );
 
-  function allowDestructive(confirm?: string, dryRun?: boolean): { allowed: boolean; reason?: string } {
-    if (dryRun) return { allowed: true };
-    if (process.env.ALLOW_DESTRUCTIVE !== "true") {
-      return { allowed: false, reason: "Destructive ops disabled. Set ALLOW_DESTRUCTIVE=true to enable." };
-    }
-    if (confirm !== "YES") {
-      return { allowed: false, reason: 'Confirmation required: set confirm:"YES" to proceed.' };
-    }
-    return { allowed: true };
-  }
 
   registerTool(
     "list_resources",
